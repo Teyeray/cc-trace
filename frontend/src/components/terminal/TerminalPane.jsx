@@ -12,15 +12,23 @@ const THEME = {
 };
 
 /**
- * A live terminal bridged to the backend PTY over WebSocket. Typing `claude`
- * here starts a real Claude Code session whose tool calls flow into the graph.
+ * A live terminal bridged to ONE backend PTY session over WebSocket. The
+ * session is identified by `terminalId`; switching ids tears down the socket
+ * and reconnects to the other session, whose scrollback the server replays on
+ * attach. The PTY keeps running while detached, so tab-switching never kills
+ * a `claude` session.
  *
- * @param {{ onStatusChange?: (connected: boolean) => void }} props
+ * @param {{ terminalId: string|null, onStatusChange?: (connected: boolean) => void }} props
  */
-export default function TerminalPane({ onStatusChange }) {
+export default function TerminalPane({ terminalId, onStatusChange }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
+    if (!terminalId) {
+      onStatusChange?.(false);
+      return undefined;
+    }
+
     const term = new Terminal({
       fontFamily: 'ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace',
       fontSize: 13,
@@ -34,7 +42,9 @@ export default function TerminalPane({ onStatusChange }) {
     fit.fit();
 
     const proto = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const ws = new WebSocket(`${proto}://${window.location.host}/terminal/ws`);
+    const ws = new WebSocket(
+      `${proto}://${window.location.host}/terminal/ws?id=${encodeURIComponent(terminalId)}`,
+    );
     ws.binaryType = 'arraybuffer';
 
     function sendResize() {
@@ -58,7 +68,9 @@ export default function TerminalPane({ onStatusChange }) {
     };
     ws.onclose = () => {
       onStatusChange?.(false);
-      term.write('\r\n\x1b[2m[terminal disconnected — restart the backend to reconnect]\x1b[0m\r\n');
+      term.write(
+        '\r\n\x1b[2m[disconnected — switch back or restart the backend]\x1b[0m\r\n',
+      );
     };
 
     const dataSub = term.onData((data) => {
@@ -76,7 +88,7 @@ export default function TerminalPane({ onStatusChange }) {
       ws.close();
       term.dispose();
     };
-  }, [onStatusChange]);
+  }, [terminalId, onStatusChange]);
 
   return <div className="terminal-pane__screen" ref={containerRef} />;
 }

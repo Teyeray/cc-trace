@@ -1,2 +1,6 @@
 fastapi>=0.110
 uvicorn[standard]>=0.29
+# Lets pydantic/FastAPI evaluate PEP 604 `X | None` annotations on Python 3.9.
+# (The codebase uses `from __future__ import annotations` + `X | None` in route
+# signatures and models, which FastAPI evaluates at registration time.)
+eval_type_backport>=0.2; python_version < "3.10"

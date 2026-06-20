@@ -2,8 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import TraceGraph from './components/trace-graph/TraceGraph.jsx';
 import DetailPanel from './components/detail-panel/DetailPanel.jsx';
 import TerminalPane from './components/terminal/TerminalPane.jsx';
+import TerminalTabs from './components/terminal/TerminalTabs.jsx';
 import { useTraceStream } from './lib/useTraceStream.js';
 import { useTranscript } from './lib/useTranscript.js';
+import { useTerminalSessions } from './lib/useTerminalSessions.js';
 import { buildGraph } from './lib/graph.js';
 
 const SESSION_POLL_MS = 4000;
@@ -14,6 +16,16 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [showTerminal, setShowTerminal] = useState(true);
   const [termConnected, setTermConnected] = useState(false);
+
+  // Terminal (PTY) sessions are a separate concept from trace sessions above:
+  // these are live shells you interact with; trace sessions are captured logs.
+  const {
+    sessions: termSessions,
+    create: createTerminal,
+    remove: removeTerminal,
+  } = useTerminalSessions();
+  const [activeTerminalId, setActiveTerminalId] = useState(null);
+
   const { events, connected } = useTraceStream(sessionId);
   const turns = useTranscript(sessionId);
 
@@ -26,14 +38,21 @@ export default function App() {
     [events, turns],
   );
 
-  // Derive selection from the live graph so the panel updates as the call
-  // resolves (running -> success/failed, output arrives).
   const selected = useMemo(
     () => nodes.find((n) => n.id === selectedId)?.data ?? null,
     [nodes, selectedId],
   );
 
-  // Poll the session list so newly-created sessions appear without a reload.
+  // Keep an active terminal tab valid: adopt the first session when none is
+  // selected, and drop the selection when its session disappears (killed/exit).
+  useEffect(() => {
+    setActiveTerminalId((current) => {
+      if (current && termSessions.some((s) => s.id === current)) return current;
+      return termSessions[0]?.id ?? null;
+    });
+  }, [termSessions]);
+
+  // Poll the trace-session list so newly-created sessions appear without reload.
   useEffect(() => {
     let active = true;
     const load = () => {
@@ -61,8 +80,9 @@ export default function App() {
     };
   }, []);
 
-  // Reset selection when switching sessions.
   useEffect(() => setSelectedId(null), [sessionId]);
+
+  const defaultCwd = termSessions[0]?.cwd ?? '';
 
   return (
     <div className="app">
@@ -114,13 +134,26 @@ export default function App() {
       <main className="app__body">
         {showTerminal ? (
           <section className="terminal-pane">
-            <div className="terminal-pane__bar">
-              <span className="terminal-pane__title">claude session</span>
-              <span className="terminal-pane__hint">
-                type <code>claude</code> to start — tool calls appear on the right →
-              </span>
-            </div>
-            <TerminalPane onStatusChange={handleTermStatus} />
+            <TerminalTabs
+              sessions={termSessions}
+              activeId={activeTerminalId}
+              defaultCwd={defaultCwd}
+              onSelect={setActiveTerminalId}
+              onCreate={createTerminal}
+              onClose={removeTerminal}
+            />
+            {activeTerminalId ? (
+              <TerminalPane
+                terminalId={activeTerminalId}
+                onStatusChange={handleTermStatus}
+              />
+            ) : (
+              <div className="terminal-pane__empty">
+                No terminal session. Click <code>+</code> to start one — choose a
+                working directory and run <code>claude</code>. Tool calls appear
+                on the right →
+              </div>
+            )}
           </section>
         ) : null}
         <section className="app__canvas">
