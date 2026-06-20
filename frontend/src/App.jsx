@@ -3,6 +3,7 @@ import TraceGraph from './components/trace-graph/TraceGraph.jsx';
 import DetailPanel from './components/detail-panel/DetailPanel.jsx';
 import TerminalPane from './components/terminal/TerminalPane.jsx';
 import TerminalTabs from './components/terminal/TerminalTabs.jsx';
+import WorkflowPanel from './components/workflow/WorkflowPanel.jsx';
 import { useTraceStream } from './lib/useTraceStream.js';
 import { useTranscript } from './lib/useTranscript.js';
 import { useTerminalSessions } from './lib/useTerminalSessions.js';
@@ -16,6 +17,7 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
   const [showTerminal, setShowTerminal] = useState(true);
   const [termConnected, setTermConnected] = useState(false);
+  const [view, setView] = useState('trace'); // 'trace' | 'workflow'
 
   // Terminal (PTY) sessions are a separate concept from trace sessions above:
   // these are live shells you interact with; trace sessions are captured logs.
@@ -96,6 +98,26 @@ export default function App() {
         </div>
 
         <div className="app__controls">
+          <div className="app__viewtoggle" role="tablist">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={view === 'trace'}
+              className={`app__viewtab ${view === 'trace' ? 'app__viewtab--on' : ''}`}
+              onClick={() => setView('trace')}
+            >
+              trace
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={view === 'workflow'}
+              className={`app__viewtab ${view === 'workflow' ? 'app__viewtab--on' : ''}`}
+              onClick={() => setView('workflow')}
+            >
+              workflow
+            </button>
+          </div>
           <button
             type="button"
             className={`app__toggle ${showTerminal ? 'app__toggle--on' : ''}`}
@@ -157,7 +179,9 @@ export default function App() {
           </section>
         ) : null}
         <section className="app__canvas">
-          {sessionId ? (
+          {view === 'workflow' ? (
+            <WorkflowPanel traceSessionId={sessionId} />
+          ) : sessionId ? (
             <TraceGraph
               nodes={nodes}
               edges={edges}
@@ -170,7 +194,7 @@ export default function App() {
             </div>
           )}
         </section>
-        {selected ? (
+        {view === 'trace' && selected ? (
           <DetailPanel detail={selected} onClose={() => setSelectedId(null)} />
         ) : null}
       </main>
