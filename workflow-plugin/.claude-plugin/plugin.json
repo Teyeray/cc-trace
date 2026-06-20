@@ -1,0 +1,5 @@
+{
+  "name": "workflow-tracer",
+  "version": "0.1.0",
+  "description": "Trace Claude Code execution into a workflow memory system"
+}

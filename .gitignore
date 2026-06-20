@@ -1,0 +1,16 @@
+# Runtime data (raw event logs, future SQLite index)
+.data/
+
+# Node / frontend
+node_modules/
+dist/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# OS / editor
+.DS_Store

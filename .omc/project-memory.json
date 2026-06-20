@@ -1,0 +1,102 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1781967174042,
+  "projectRoot": "/Users/yangruiming/Projects/cc-trace",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Python",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "requirements.txt"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "pip",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "backend": {
+      "path": "backend",
+      "purpose": null,
+      "fileCount": 9,
+      "lastAccessed": 1781967174010,
+      "keyFiles": [
+        "__init__.py",
+        "api.py",
+        "config.py",
+        "events.py",
+        "hooks.py"
+      ]
+    },
+    "frontend": {
+      "path": "frontend",
+      "purpose": null,
+      "fileCount": 4,
+      "lastAccessed": 1781967174012,
+      "keyFiles": [
+        "index.html",
+        "package-lock.json",
+        "package.json",
+        "vite.config.js"
+      ]
+    },
+    "workflow-plugin": {
+      "path": "workflow-plugin",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1781967174013,
+      "keyFiles": []
+    },
+    "frontend/dist": {
+      "path": "frontend/dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 1,
+      "lastAccessed": 1781967174015,
+      "keyFiles": [
+        "index.html"
+      ]
+    },
+    "frontend/node_modules": {
+      "path": "frontend/node_modules",
+      "purpose": "Dependencies",
+      "fileCount": 1,
+      "lastAccessed": 1781967174016,
+      "keyFiles": []
+    },
+    "frontend/src": {
+      "path": "frontend/src",
+      "purpose": "Source code",
+      "fileCount": 2,
+      "lastAccessed": 1781967174016,
+      "keyFiles": [
+        "App.jsx",
+        "main.jsx"
+      ]
+    }
+  },
+  "hotPaths": [],
+  "userDirectives": []
+}

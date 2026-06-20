@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"cd /Users/yangruiming/Projects/cc-trace\\necho \\\"=== import + PROJECT_ROOT ===\\\" && .venv/bin/python -c \\\"from backend import terminal, config; print('OK, PROJECT_ROOT=', config.PROJECT_ROO...",
+  "error": "Exit code 1\n=== import + PROJECT_ROOT ===\nOK, PROJECT_ROOT= /Users/yangruiming/Projects/cc-trace | launch= /bin/zsh\n=== wait for reload, then routes ===\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    from backend.main import app; print([r.path for r in app.routes if 'terminal' in r.path or 'ws' in r.path.lower()])\n                                                                                     ^^^^^^\nAttributeError: '_IncludedRouter' object has no attribute 'pa...",
+  "timestamp": "2026-06-18T06:15:05.707Z",
+  "retry_count": 1
+}

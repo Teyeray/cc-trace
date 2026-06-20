@@ -1,0 +1,34 @@
+{
+  "PreToolUse": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "curl -s --max-time 2 -X POST http://localhost:8000/hooks/pre-tool -H 'Content-Type: application/json' -d @- || true"
+        }
+      ]
+    }
+  ],
+  "PostToolUse": [
+    {
+      "matcher": "*",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "curl -s --max-time 2 -X POST http://localhost:8000/hooks/post-tool -H 'Content-Type: application/json' -d @- || true"
+        }
+      ]
+    }
+  ],
+  "Stop": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "curl -s --max-time 2 -X POST http://localhost:8000/hooks/stop -H 'Content-Type: application/json' -d @- || true"
+        }
+      ]
+    }
+  ]
+}

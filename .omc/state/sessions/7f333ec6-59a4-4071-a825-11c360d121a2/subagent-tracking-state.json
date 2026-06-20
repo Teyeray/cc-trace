@@ -1,0 +1,71 @@
+{
+  "agents": [
+    {
+      "agent_id": "ac6e21ca10d083a81",
+      "agent_type": "unknown",
+      "started_at": "2026-06-17T09:43:22.615Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-17T09:43:22.615Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "ad9abe824627d941c",
+      "agent_type": "unknown",
+      "started_at": "2026-06-18T01:25:21.405Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-18T01:25:21.405Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "aac9ebafcba9f917a",
+      "agent_type": "unknown",
+      "started_at": "2026-06-18T01:28:04.469Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-18T01:28:04.469Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "a9cc1cd2b5578b976",
+      "agent_type": "unknown",
+      "started_at": "2026-06-18T01:31:56.870Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-18T01:31:56.870Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "a861274c99c3cda33",
+      "agent_type": "unknown",
+      "started_at": "2026-06-18T01:35:45.775Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-18T01:35:45.775Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "a279bfa55fdb517fa",
+      "agent_type": "unknown",
+      "started_at": "2026-06-18T01:41:48.795Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-18T01:41:48.795Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "affbf8dcd2e7ace6b",
+      "agent_type": "unknown",
+      "started_at": "2026-06-18T02:42:54.566Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-18T02:42:54.566Z",
+      "duration_ms": 0
+    }
+  ],
+  "total_spawned": 0,
+  "total_completed": 7,
+  "total_failed": 0,
+  "last_updated": "2026-06-18T02:42:54.668Z"
+}

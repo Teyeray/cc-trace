@@ -1,0 +1,62 @@
+{
+  "agents": [
+    {
+      "agent_id": "a9b30a1e9ad7b4ab3",
+      "agent_type": "unknown",
+      "started_at": "2026-06-18T02:10:49.639Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-18T02:10:49.639Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "a2cca6702fdb30b07",
+      "agent_type": "unknown",
+      "started_at": "2026-06-18T02:18:20.536Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-18T02:18:20.536Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "a944276aa9bb465c7",
+      "agent_type": "unknown",
+      "started_at": "2026-06-18T02:21:06.018Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-18T02:21:06.018Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "a5eb47b9be714c2db",
+      "agent_type": "unknown",
+      "started_at": "2026-06-18T02:36:06.136Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-18T02:36:06.136Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "a2ff3db25fdec4f29",
+      "agent_type": "unknown",
+      "started_at": "2026-06-18T02:39:08.601Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-18T02:39:08.601Z",
+      "duration_ms": 0
+    },
+    {
+      "agent_id": "abb46907c7f10165f",
+      "agent_type": "ecc:security-reviewer",
+      "started_at": "2026-06-18T06:26:01.404Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-06-18T06:27:04.982Z",
+      "duration_ms": 63578
+    }
+  ],
+  "total_spawned": 1,
+  "total_completed": 7,
+  "total_failed": 0,
+  "last_updated": "2026-06-18T06:27:05.086Z"
+}
