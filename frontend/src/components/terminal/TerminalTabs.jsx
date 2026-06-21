@@ -32,8 +32,6 @@ export default function TerminalTabs({
 }) {
   const [showDialog, setShowDialog] = useState(false);
 
-  const recentCwds = [...new Set(sessions.map((s) => s.cwd))];
-
   const handleCreate = async (opts) => {
     const session = await onCreate(opts);
     if (session?.id) onSelect(session.id);
@@ -84,7 +82,6 @@ export default function TerminalTabs({
       {showDialog ? (
         <NewSessionDialog
           defaultCwd={defaultCwd}
-          recentCwds={recentCwds}
           onCreate={handleCreate}
           onClose={() => setShowDialog(false)}
         />

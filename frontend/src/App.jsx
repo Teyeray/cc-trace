@@ -4,6 +4,7 @@ import DetailPanel from './components/detail-panel/DetailPanel.jsx';
 import TerminalPane from './components/terminal/TerminalPane.jsx';
 import TerminalTabs from './components/terminal/TerminalTabs.jsx';
 import WorkflowPanel from './components/workflow/WorkflowPanel.jsx';
+import SdkPanel from './components/sdk/SdkPanel.jsx';
 import { useTraceStream } from './lib/useTraceStream.js';
 import { useTranscript } from './lib/useTranscript.js';
 import { useTerminalSessions } from './lib/useTerminalSessions.js';
@@ -117,6 +118,15 @@ export default function App() {
             >
               workflow
             </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={view === 'sdk'}
+              className={`app__viewtab ${view === 'sdk' ? 'app__viewtab--on' : ''}`}
+              onClick={() => setView('sdk')}
+            >
+              sdk
+            </button>
           </div>
           <button
             type="button"
@@ -154,6 +164,27 @@ export default function App() {
       </header>
 
       <main className="app__body">
+        <section className="app__canvas">
+          {view === 'sdk' ? (
+            <SdkPanel />
+          ) : view === 'workflow' ? (
+            <WorkflowPanel traceSessionId={sessionId} />
+          ) : sessionId ? (
+            <TraceGraph
+              nodes={nodes}
+              edges={edges}
+              selectedId={selectedId}
+              onSelect={setSelectedId}
+            />
+          ) : (
+            <div className="app__empty">
+              Run a tool in a Claude Code session to see it appear here.
+            </div>
+          )}
+        </section>
+        {view === 'trace' && selected ? (
+          <DetailPanel detail={selected} onClose={() => setSelectedId(null)} />
+        ) : null}
         {showTerminal ? (
           <section className="terminal-pane">
             <TerminalTabs
@@ -173,29 +204,10 @@ export default function App() {
               <div className="terminal-pane__empty">
                 No terminal session. Click <code>+</code> to start one — choose a
                 working directory and run <code>claude</code>. Tool calls appear
-                on the right →
+                in the graph on the left ←
               </div>
             )}
           </section>
-        ) : null}
-        <section className="app__canvas">
-          {view === 'workflow' ? (
-            <WorkflowPanel traceSessionId={sessionId} />
-          ) : sessionId ? (
-            <TraceGraph
-              nodes={nodes}
-              edges={edges}
-              selectedId={selectedId}
-              onSelect={setSelectedId}
-            />
-          ) : (
-            <div className="app__empty">
-              Run a tool in a Claude Code session to see it appear here.
-            </div>
-          )}
-        </section>
-        {view === 'trace' && selected ? (
-          <DetailPanel detail={selected} onClose={() => setSelectedId(null)} />
         ) : null}
       </main>
     </div>

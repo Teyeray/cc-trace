@@ -1,30 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import FolderPicker from './FolderPicker.jsx';
 
 /**
  * Compact popover to launch a new terminal session: pick a working directory
- * and what to run (a Claude Code session, or a plain shell).
+ * (via the server-side folder browser) and what to run (a Claude Code session,
+ * or a plain shell).
  *
  * @param {{
  *   defaultCwd?: string,
- *   recentCwds?: string[],
  *   onCreate: (opts: {cwd: string, cmd: string}) => Promise<void>,
  *   onClose: () => void,
  * }} props
  */
-export default function NewSessionDialog({
-  defaultCwd = '',
-  recentCwds = [],
-  onCreate,
-  onClose,
-}) {
+export default function NewSessionDialog({ defaultCwd = '', onCreate, onClose }) {
   const [cwd, setCwd] = useState(defaultCwd);
   const [cmd, setCmd] = useState('claude');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
-  const inputRef = useRef(null);
 
   useEffect(() => {
-    inputRef.current?.focus();
     const onKey = (e) => {
       if (e.key === 'Escape') onClose();
     };
@@ -49,26 +43,10 @@ export default function NewSessionDialog({
   return (
     <div className="new-session" role="dialog" aria-label="New terminal session">
       <form className="new-session__form" onSubmit={submit}>
-        <label className="new-session__label">
+        <div className="new-session__label">
           <span>working directory</span>
-          <input
-            ref={inputRef}
-            className="new-session__input"
-            type="text"
-            value={cwd}
-            placeholder={defaultCwd || '/path/to/project'}
-            onChange={(e) => setCwd(e.target.value)}
-            list="recent-cwds"
-            spellCheck={false}
-          />
-          {recentCwds.length > 0 ? (
-            <datalist id="recent-cwds">
-              {recentCwds.map((d) => (
-                <option key={d} value={d} />
-              ))}
-            </datalist>
-          ) : null}
-        </label>
+          <FolderPicker value={cwd} onChange={setCwd} />
+        </div>
 
         <fieldset className="new-session__choice">
           <label>

@@ -84,13 +84,35 @@ graph populate.
 | `POST /workflows/{id}/run` | Sandboxed execution (Phase 6) |
 | `POST /index/reindex`, `GET /index/sessions` | SQLite index (Phase 2) |
 | `POST/GET/DELETE /terminal/sessions`, `WS /terminal/ws?id=` | Multi-session terminal |
+| `GET /fs/list?path=` | Server-side folder browser (HOME-confined) for the cwd picker |
+| `POST /sdk/run` | Programmatic Claude Code session via the CLI stream-json transport (SSE) |
+
+## UI layout
+
+The trace / workflow / sdk views sit on the **left**; the embedded terminal is on the **right**.
+The header's `trace | workflow | sdk` toggle switches the left pane.
 
 ## Embedded terminal
 
 A PTY-over-WebSocket bridge lets you run `claude` (or a shell) inside the UI. Tool calls from
 that session flow through the same hooks → graph. Sessions are long-lived and decoupled from
 the socket, so switching tabs never kills a running `claude`. Each session picks its own
-working directory at creation.
+working directory at creation **via a server-side folder browser** (`GET /fs/list`) — no manual
+path typing — confined to your home directory.
+
+## Programmatic sessions (SDK transport)
+
+The `sdk` view runs Claude Code **headless** instead of interactively: it shells out to
+`claude -p <prompt> --output-format stream-json` (the same streaming transport the official
+Agent SDK uses) and reads the structured event stream directly. Captured `tool_use`/
+`tool_result` blocks are synthesized into the **same hook-envelope shape** and pushed through
+`storage.append_jsonl` + the broadcaster, so an SDK-driven session flows into the identical
+normalize → replay → WorkflowIR pipeline and live trace graph. It is an **additional** session
+source — the interactive terminal and curl hooks are fully preserved.
+
+> We shell out to the CLI rather than `import claude_agent_sdk` because that package needs
+> Python ≥3.10 and this project is pinned to 3.9; the CLI's stream-json mode is the same
+> transport and reuses your existing CLI auth.
 
 **Security:** the terminal and the workflow runtime are remote-code-execution by design. The
 server binds `127.0.0.1` only, the WebSocket validates `Origin` against loopback (WebSockets
@@ -127,11 +149,16 @@ backend/
   workflow_api.py   # HTTP surface for normalize/replay/build/distill/run
   terminal_sessions.py  # long-lived PTY registry (multi-session)
   terminal.py       # terminal REST + WebSocket attach/detach
+  fs_api.py         # server-side folder browser (HOME-confined)
+  sdk_session.py    # programmatic Claude Code via CLI stream-json transport
+  sdk_api.py        # POST /sdk/run (SSE)
   main.py           # FastAPI app + /healthz
 frontend/
   src/components/trace-graph/   # React Flow graph
-  src/components/terminal/      # tabs, new-session dialog, xterm pane
-  src/lib/                      # SSE/transcript/terminal hooks, graph builder
+  src/components/terminal/      # tabs, new-session dialog, folder picker, xterm pane
+  src/components/workflow/      # WorkflowIR view (build/distill/run)
+  src/components/sdk/           # headless SDK run panel
+  src/lib/                      # SSE/transcript/terminal/workflow hooks, graph builder
 tests/
   test_pipeline.py  # normalize/replay/workflow/distiller/runtime/index
 workflow-plugin/    # shippable plugin form of the hooks

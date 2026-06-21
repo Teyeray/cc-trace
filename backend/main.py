@@ -11,7 +11,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import api, config, hooks, terminal, workflow_api
+from . import api, config, fs_api, hooks, sdk_api, terminal, workflow_api
 from .terminal_sessions import registry as terminal_registry
 
 logging.basicConfig(level=logging.INFO)
@@ -40,6 +40,8 @@ app.include_router(hooks.router)
 app.include_router(api.router)
 app.include_router(terminal.router)
 app.include_router(workflow_api.router)
+app.include_router(fs_api.router)
+app.include_router(sdk_api.router)
 
 
 @app.get("/healthz")

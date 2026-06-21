@@ -10,6 +10,12 @@ export default defineConfig({
     proxy: {
       '/sessions': 'http://localhost:8000',
       '/transcript': 'http://localhost:8000',
+      '/fs': 'http://localhost:8000',
+      '/workflows': 'http://localhost:8000',
+      '/normalize': 'http://localhost:8000',
+      '/replay': 'http://localhost:8000',
+      '/index': 'http://localhost:8000',
+      '/sdk': 'http://localhost:8000',
       '/events': {
         target: 'http://localhost:8000',
         changeOrigin: true,
